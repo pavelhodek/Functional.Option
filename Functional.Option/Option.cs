@@ -9,7 +9,13 @@ namespace Functional.Option
 
         public abstract override int GetHashCode();
 
-        public abstract T Return();
+        public abstract T Value { get; }
+        public abstract T ValueOrDefault();
+        public abstract T ValueOrElse(T @default);
+        public abstract T ValueOrElse(Func<T> @default);
+
+        public abstract bool IsSome { get; }
+        public abstract bool IsNone { get; }
 
         public override bool Equals(object other)
         {

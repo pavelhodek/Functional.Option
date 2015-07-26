@@ -10,62 +10,73 @@ namespace Functional.Option.Tests
         public void NullToOptionShouldBeNone()
         {
             string x = null;
-            Assert.IsInstanceOf<None<string>>(x.ToOption());
+            //Assert.IsInstanceOf<None<string>>(x.ToOption());
+            Assert.IsTrue(x.ToOption().IsNone);
+            Assert.IsFalse(x.ToOption().IsSome);
         }
 
         [Test]
         public void SomethingToOptionShouldBeSome()
         {
             var something = "something";
-            Assert.IsInstanceOf<Some<string>>(something.ToOption());
+            //Assert.IsInstanceOf<Some<string>>(something.ToOption());
+            Assert.IsTrue(something.ToOption().IsSome);
+            Assert.IsFalse(something.ToOption().IsNone);
         }
 
         [Test]
         public void SomeShouldReturnItsValue()
         {
-            var something = new Some<string>("something");
-            Assert.AreEqual("something", something.Return());
+            //var something = new Some<string>("something");
+            //Assert.AreEqual("something", something.Get());
+
+            var something = "something".ToOption();
+            Assert.AreEqual("something", something.Value);
         }
 
         [Test]
         public void NoneOfReferenceTypeShouldReturnDefaultValue()
         {
-            var nothing = None<string>.Instance;
-            Assert.Null(nothing.Return());
+            //var nothing = None<string>.Instance;
+            //Assert.Null(nothing.Get());
+            string nullStirng = null;
+            var nothing = nullStirng.ToOption();
+            Assert.Null(nothing.ValueOrDefault());
         }
 
-        [Test]
-        public void NoneOfPrimitiveTypeShouldReturnDefaultValue()
-        {
-            var nothing = None<int>.Instance;
-            Assert.AreEqual(0, nothing.Return());
-        }
+        //[Test]
+        //public void NoneOfPrimitiveTypeShouldReturnDefaultValue()
+        //{
+        //    //var nothing = None<int>.Instance;
+        //    //Assert.AreEqual(0, nothing.Get());
+        //}
 
         [Test]
         public void NoneShouldBindToNone()
         {
-            var nothing = None<int>.Instance;
-            Assert.IsInstanceOf<None<int>>(nothing.Bind(x => (x + 1).ToOption()));
+            var none = ((string)null).ToOption();
+            Assert.True(none.Bind(x => (x + "abc").ToOption()).IsNone);
         }
 
         [Test]
         public void SomeShouldBind()
         {
             var something = 1.ToOption();
-            Assert.AreEqual("1", something.Bind(x => x.ToString().ToOption()).Return());
+            Assert.AreEqual("1", something.Bind(x => x.ToString().ToOption()).Value);
         }
 
         [Test]
         public void SomeShouldBindCorrectly()
         {
             var something = 1.ToOption();
-            Assert.AreEqual(3, something.Bind(x => (x + 2).ToOption()).Return());
+            Assert.AreEqual(3, something.Bind(x => (x + 2).ToOption()).Value);
         }
 
         [Test]
         public void NoneToStringShouldReturnNone()
         {
-            Assert.AreEqual("[None]", None<string>.Instance.ToString());
+            //Assert.AreEqual("[None]", None<string>.Instance.ToString());
+            Assert.AreEqual("[None]",  ((string)null).ToOption().ToString());
         }
 
         [Test]
@@ -77,74 +88,75 @@ namespace Functional.Option.Tests
         [Test]
         public void NoneShouldNotEqualToNull()
         {
-            Assert.AreNotEqual(None<int>.Instance, null);
+            //Assert.AreNotEqual(None<int>.Instance, null);
+            Assert.AreNotEqual(((string)null).ToOption(), null);
         }
 
-        [Test]
-        public void NoneOfTheSamePrimitivesShouldEqual()
-        {
-            Assert.AreEqual(None<int>.Instance, None<int>.Instance);
-        }
+        //[Test]
+        //public void NoneOfTheSamePrimitivesShouldEqual()
+        //{
+        //    Assert.AreEqual(None<int>.Instance, None<int>.Instance);
+        //}
 
-        [Test]
-        public void NonesOfTheSameStructsShouldEqual()
-        {
-            Assert.AreEqual(None<DateTime>.Instance, None<DateTime>.Instance);
-        }
+        //[Test]
+        //public void NonesOfTheSameStructsShouldEqual()
+        //{
+        //    Assert.AreEqual(None<DateTime>.Instance, None<DateTime>.Instance);
+        //}
 
         [Test]
         public void SomeShouldNotEqualToNull()
         {
-            Assert.AreNotEqual(new Some<int>(1), null);
+            Assert.AreNotEqual(1.ToOption(), null);
         }
 
         [Test]
         public void SomeShoudlEqualSomeWhenPrimitiveValuesAreEqual()
         {
-            Assert.AreEqual(new Some<int>(1), new Some<int>(1));
+            Assert.AreEqual(1.ToOption(), 1.ToOption());
         }
 
         [Test]
         public void SomeShoudlEqualSomeWhenStructValuesAreEqual()
         {
-            Assert.AreEqual(new Some<DateTime>(new DateTime(2015, 6, 17)), new Some<DateTime>(new DateTime(2015, 6, 17)));
+            Assert.AreEqual(new DateTime(2015, 6, 17).ToOption(), new DateTime(2015, 6, 17).ToOption());
         }
 
         [Test]
         public void SomeShouldNotEqualSomeWhenValuesAreNotEqual()
         {
-            Assert.AreNotEqual(new Some<int>(1), new Some<int>(2));
+            Assert.AreNotEqual(1.ToOption(), 2.ToOption());
         }
 
         [Test]
         public void SomeShouldEqualSomeWhenValueReferencesAreSame()
         {
             var x = "test";
-            Assert.AreEqual(new Some<string>(x), new Some<string>(x));
+            Assert.AreEqual(x.ToOption(), x.ToOption());
         }
 
         [Test]
         public void SomeShouldNotEqualToNone()
         {
-            Assert.AreNotEqual(1.ToOption(), None<int>.Instance);
+            Assert.AreNotEqual("".ToOption(), ((string)null).ToOption());
         }
 
         [Test]
         public void SameOptionValuesShouldBeEqual()
         {
-            Assert.AreEqual(1.ToOption(), 1.ToOption());
+            Assert.AreEqual("".ToOption(), "".ToOption());
         }
 
         [Test]
-        public void OptionEqualityOperatorShouldReturnTrueForSameOptions()
+        public void OptionEqualityOperatorShouldReturnTrueForPrimitiveSameOptions()
         {
             Assert.True(1.ToOption() == 1.ToOption());
         }
 
         [Test]
-        public void OptionEqualityOperatorShouldReturnTrueForSomeSameOptions()
+        public void OptionEqualityOperatorShouldReturnTrueForSameOptions()
         {
-            Assert.True(1.ToOption() == new Some<int>(1));
+            Assert.True("a".ToOption() == "a".ToOption());
         }
 
         [Test]
@@ -156,7 +168,7 @@ namespace Functional.Option.Tests
         [Test]
         public void NoneOfSameTypeShouldEqual()
         {
-            Assert.True(None<int>.Instance == None<int>.Instance);
+            Assert.True(((int?)null).ToOption() == ((int?)null).ToOption());
         }
 
         [Test]
@@ -184,7 +196,7 @@ namespace Functional.Option.Tests
         public void NullOptionToOptionShouldBeNone()
         {
             Option<int> x = null;
-            Assert.IsInstanceOf<None<int>>(x.ToOption());
+            Assert.IsTrue(x.ToOption().IsNone);
         }
 
     }

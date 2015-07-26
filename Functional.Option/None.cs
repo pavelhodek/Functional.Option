@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Functional.Option.Tests")]
+//[assembly: InternalsVisibleTo("Functional.Option.Tests")]
 namespace Functional.Option
 {
     internal class None<T> : Option<T>, IEquatable<None<T>>
@@ -41,14 +41,41 @@ namespace Functional.Option
             return 0;
         }
 
-        public override T Return()
+        public override T Value
+        {
+            get { throw new ArgumentException(); }
+        }
+
+        public override T ValueOrDefault()
         {
             return default(T);
         }
+
+        public override T ValueOrElse(T @default)
+        {
+            return @default;
+        }
+
+        public override T ValueOrElse(Func<T> @default)
+        {
+            return @default();
+        }
+
+        public override bool IsNone
+        {
+            get { return true; }
+        }
+
+        public override bool IsSome
+        {
+            get { return !IsNone; }
+        }
+
 
         public override string ToString()
         {
             return "[None]";
         }
+
     }
 }

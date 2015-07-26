@@ -8,39 +8,39 @@ namespace Functional.Option
     {
         public static IEnumerable<T> ToEnumerable<T>(this Option<T> value)
         {
-            if (IsNone(value))
+            if (value.IsNone)
                 return Enumerable.Empty<T>();
-            return new[] { value.Return() }.AsEnumerable();
+            return new[] { value.Value }.AsEnumerable();
         }
 
-        public static T Return<T>(this Option<T> value, T @default)
-        {
-            return FromOption(value, @default);
-        }
+        //public static T Return<T>(this Option<T> value, T @default)
+        //{
+        //    return FromOption(value, @default);
+        //}
 
-        public static IEnumerable<T> Return<T>(this IEnumerable<Option<T>> collection)
-        {
-            return CatOption(collection);
-        }
+        //public static IEnumerable<T> Return<T>(this IEnumerable<Option<T>> collection)
+        //{
+        //    return CatOption(collection);
+        //}
 
-        private static bool IsSome<T>(Option<T> value)
-        {
-            return value is Some<T>;
-        }
+        //private static bool IsSome<T>(Option<T> value)
+        //{
+        //    return value is Some<T>;
+        //}
 
-        private static bool IsNone<T>(Option<T> value)
-        {
-            return !IsSome(value);
-        }
+        //private static bool IsNone<T>(Option<T> value)
+        //{
+        //    return !IsSome(value);
+        //}
 
-        private static T FromOption<T>(Option<T> value, T @default)
-        {
-            return IsSome(value) ? value.Return() : @default;
-        }
+        //private static T FromOption<T>(Option<T> value, T @default)
+        //{
+        //    return value.IsSome() ? value.Get() : @default;
+        //}
 
-        private static IEnumerable<T> CatOption<T>(IEnumerable<Option<T>> collection)
+        private static IEnumerable<T> CatOption<T>(this IEnumerable<Option<T>> collection)
         {
-            return collection.Where(IsSome).Select(x => x.Return());
+            return collection.Where(x => x.IsSome).Select(x => x.Value);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Functional.Option.Tests")]
+//[assembly: InternalsVisibleTo("Functional.Option.Tests")]
 namespace Functional.Option
 {
     internal class Some<T> : Option<T>, IEquatable<Some<T>>
@@ -32,10 +32,6 @@ namespace Functional.Option
             return Equals(other as Some<T>);
         }
 
-        public override T Return()
-        {
-            return this.value;
-        }
 
         public override int GetHashCode()
         {
@@ -45,6 +41,36 @@ namespace Functional.Option
         public override string ToString()
         {
             return this.value.ToString();
+        }
+
+        public override T Value
+        {
+            get { return this.value; }
+        }
+
+        public override T ValueOrDefault()
+        {
+            return Value;
+        }
+
+        public override T ValueOrElse(T @default)
+        {
+            return Value;
+        }
+
+        public override T ValueOrElse(Func<T> @default)
+        {
+            return Value;
+        }
+
+        public override bool IsNone
+        {
+            get { return !IsSome; }
+        }
+
+        public override bool IsSome
+        {
+            get { return true; }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Functional.Option.Tests
             var query = from a in 1.ToOption()
                         select a.ToString();
 
-            Assert.AreEqual("1", query.Return());
+            Assert.AreEqual("1", query.Value);
         }
 
         [Test]
@@ -21,7 +21,7 @@ namespace Functional.Option.Tests
                         from b in 2.ToOption()
                         select a + b;
 
-            Assert.AreEqual(3, query.Return());
+            Assert.AreEqual(3, query.Value);
         }
 
         [Test]
@@ -31,7 +31,8 @@ namespace Functional.Option.Tests
                         where a == 0
                         select a;
 
-            Assert.IsInstanceOf<None<int>>(query);
+            //Assert.IsInstanceOf<None<int>>(query);
+            Assert.IsTrue(query.IsNone);
         }
 
         [Test]
@@ -41,7 +42,7 @@ namespace Functional.Option.Tests
                         where a == 1
                         select a;
 
-            Assert.AreEqual(1, query.Return());
+            Assert.AreEqual(1, query.Value);
         }
     }
 }

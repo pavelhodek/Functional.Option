@@ -12,7 +12,7 @@ namespace Functional.Option
         {
         }
 
-        public static Option<T> Instance
+        internal static Option<T> Instance
         {
             get
             {
@@ -46,17 +46,17 @@ namespace Functional.Option
             get { throw new ArgumentException(); }
         }
 
-        public override T ValueOrDefault()
+        public override T GetValueOrDefault()
         {
             return default(T);
         }
 
-        public override T ValueOrElse(T @default)
+        public override T GetValueOrElse(T @default)
         {
             return @default;
         }
 
-        public override T ValueOrElse(Func<T> @default)
+        public override T GetValueOrElse(Func<T> @default)
         {
             return @default();
         }

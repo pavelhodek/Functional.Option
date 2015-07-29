@@ -48,19 +48,19 @@ namespace Functional.Option
             get { return this.value; }
         }
 
-        public override T ValueOrDefault()
+        public override T GetValueOrDefault()
         {
-            return Value;
+            return this.value;
         }
 
-        public override T ValueOrElse(T @default)
+        public override T GetValueOrElse(T @default)
         {
-            return Value;
+            return this.value;
         }
 
-        public override T ValueOrElse(Func<T> @default)
+        public override T GetValueOrElse(Func<T> @default)
         {
-            return Value;
+            return this.value;
         }
 
         public override bool IsNone

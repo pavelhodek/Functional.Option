@@ -39,8 +39,15 @@ namespace Functional.Option.Tests
         [Test]
         public void NullToOptionShouldReturnDefaultValue()
         {
-            string nullStirng = null;
-            var nothing = nullStirng.ToOption();
+            string nullString = null;
+            var nothing = nullString.ToOption();
+            Assert.Null(nothing.GetValueOrDefault());
+        }
+
+        [Test]
+        public void NullToOptionShouldReturnDefaultValue2()
+        {
+            var nothing = Option.Of<string>(null);
             Assert.Null(nothing.GetValueOrDefault());
         }
 
@@ -52,11 +59,34 @@ namespace Functional.Option.Tests
         }
 
         [Test]
+        public void NoneShouldBindToNone2()
+        {
+            var none = Option.Of((string)null);
+            Assert.True(none.Bind(x => Option.Of(x + "abc")).IsNone);
+        }
+
+        [Test]
+        public void NoneShouldBindToNone3()
+        {
+            var none = Option.None();
+            Assert.True(none.Bind(x => Option.Of(x + "abc")).IsNone);
+        }
+
+
+        [Test]
         public void SomeShouldBind()
         {
             var something = 1.ToOption();
             Assert.AreEqual("1", something.Bind(x => x.ToString().ToOption()).Value);
         }
+
+        [Test]
+        public void SomeShouldBind2()
+        {
+            var something = Option.Of(1);
+            Assert.AreEqual("1", something.Bind(x => Option.Of(x.ToString())).Value);
+        }
+
 
         [Test]
         public void SomeShouldBindCorrectly()

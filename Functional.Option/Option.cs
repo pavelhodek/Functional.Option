@@ -38,4 +38,24 @@ namespace Functional.Option
             return !(a == b);
         }
     }
+
+
+    public static class Option
+    {
+        public static Option<T> Of<T>(T value)
+        {
+            return value.ToOption();
+        }
+
+        public static Option<object> None()
+        {
+            return None<object>.Instance;
+        }
+
+        public static Option<T> Some<T>(T value) where T: struct
+        {
+            return new Some<T>(value);
+        }
+    }
+
 }
